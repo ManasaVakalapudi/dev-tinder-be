@@ -1,5 +1,6 @@
 const express = require("express");
 const { validateSignupData } = require("../utils/validations");
+const validator = require("validator");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const authRouter = express.Router();
@@ -43,11 +44,21 @@ authRouter.post("/login", async (req, res) => {
     } else {
         //generate a jwt token and send it to user
         const token = user.getJWT();
-        res.cookie("token", token, { httpOnly: true, secure: true, expires: new Date(Date.now() + 3600000) }); //1 hour
+        res.cookie("token", token, { httpOnly: true, secure: false, expires: new Date(Date.now() + 3600000) }); //1 hour
     }
     res.send("User logged in successfully");
   } catch (error) {
     console.error("Error logging in user:", error);
+    return res.status(500).send("Internal Server Error");
+  }
+});
+
+authRouter.post("/logout", (req, res) => {
+  try{
+    res.clearCookie("token");
+    res.send("User logged out successfully");
+  } catch(error){
+    console.error("Error logging out user:", error);
     return res.status(500).send("Internal Server Error");
   }
 });

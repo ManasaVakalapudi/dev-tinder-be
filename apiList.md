@@ -6,7 +6,7 @@ post /logout
 # profileRouter
 get /profile/view
 patch /profile/edit
-patch /profile/password
+patch /profile/forgotPassword - forgot password
 
 # connectionRequestRouter
 post /request/send/interested/:userId

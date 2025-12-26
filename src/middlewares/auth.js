@@ -8,7 +8,7 @@ const userAuth = async (req, res, next) => {
     if (!token) {
         return res.status(401).send("Unauthorized");
     }
-    const decodedToken = await jwt.verify(token, "jwtSecretKey");
+    const decodedToken = jwt.verify(token, "jwtSecretKey");
     const { _id } = decodedToken;
     const user = await User.findById(_id);
     if (!user) {
