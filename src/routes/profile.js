@@ -5,7 +5,7 @@ const { validateEditProfileData } = require("../utils/validations");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 
-profileRouter.get("/profile/view", userAuth, async (req, res) => {
+profileRouter.get("/view", userAuth, async (req, res) => {
   try {
     const user = req.user;
     if (!user) {
@@ -18,7 +18,7 @@ profileRouter.get("/profile/view", userAuth, async (req, res) => {
   }
 });
 
-profileRouter.patch('/profile/edit', userAuth, async(req,res)=>{
+profileRouter.patch('/edit', userAuth, async(req,res)=>{
   console.log('req.user', req.user);
   try{
     if(!validateEditProfileData(req)){
@@ -36,7 +36,7 @@ profileRouter.patch('/profile/edit', userAuth, async(req,res)=>{
   }
 }); 
 
-profileRouter.post('/profile/forgotPassword', async(req,res)=>{
+profileRouter.post('/forgotPassword', async(req,res)=>{
   const {emailId, newPassword} = req.body;
   try{
     const user = await User.findOne({emailId});

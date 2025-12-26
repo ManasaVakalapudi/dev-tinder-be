@@ -3,10 +3,12 @@ const connectionRequestSchema = new mongoose.Schema(
   {
     senderId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "User", //reference to User model
       required: true,
     },
     receiverId: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "User", //reference to User model
       required: true,
     },
     status: {
@@ -21,7 +23,7 @@ const connectionRequestSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-connectionRequestSchema.pre("save", function(){
+connectionRequestSchema.pre("save", function(next){
   const connectionRequest = this;
   // check if senderId and receiverId are the same
   if(connectionRequest.senderId.equals(connectionRequest.receiverId)){
