@@ -49,6 +49,10 @@ userRouter.get("/connections", userAuth, async (req, res) => {
 
 userRouter.get("/feed", userAuth, async (req, res) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) > 50 ? 50 : parseInt(req.query.limit) || 10;
+    const skip = (page-1) * limit;
+
     // user shouldnt see in the feed:
     // himself
     // his connections
@@ -68,7 +72,7 @@ userRouter.get("/feed", userAuth, async (req, res) => {
 
     const usersInFeed = await User.find({
       _id: { $nin: Array.from(excludedUserIds) },
-    }).select(safeFields);
+    }).select(safeFields).skip(skip).limit(limit);
 
     res.json({ data: usersInFeed });
   } catch (error) {
