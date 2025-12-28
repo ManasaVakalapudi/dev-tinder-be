@@ -7,6 +7,7 @@ const authRouter = require("./routes/auth");
 const profileRouter = require("./routes/profile");
 const requestRouter = require("./routes/requests");
 const userRouter = require("./routes/user");
+const ConnectionRequest = require("./models/connectionRequest");
 app.use(express.json());
 app.use(cookieParser());
 
@@ -92,6 +93,17 @@ app.patch("/user", async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 });
+
+//get all connections and connection requests of all users
+app.get('/allConnections', async(req,res)=>{
+  try{
+    const allConnections = await ConnectionRequest.find({}).populate("senderId", "emailId").populate("receiverId", "emailId");
+    res.json({data: allConnections});
+  } catch(error){
+    console.error("Error fetching all connections:", error);
+    return res.status(500).send("Internal Server Error");
+  }
+})
 
 app.get('/',(req,res)=>{
   res.send("Welcome to DevTinder Backend");
